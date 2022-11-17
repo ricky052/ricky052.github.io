@@ -1,0 +1,356 @@
+<html onclick="lompat()">
+    <head>
+        <title>THE LOST CAT</title>
+    <style>
+ *{
+      text-align: center;
+        font-family: 'Times New Roman', Times;
+}
+body{
+   border: 1px solid #2A5E2E;
+   width: 1360px;
+   height: 600px;
+   margin-top: 8px;
+   background: url("background.png");
+   background-size: cover;
+}
+.container-player{
+   display: flex;
+}
+.container-player div{
+   border: 10px #000000 solid;
+   border-radius: 60px 60px 89px 89px;
+   background-color: rgba(25, 37, 38, 1);
+   width: 330px;
+   height: 260px;
+}
+section img{
+    height: 230px;
+    width: 230px;
+}
+section img:hover{
+    filter: opacity(30%);
+    cursor: pointer;
+}
+div{
+    margin: 2% auto;
+}
+button{
+    width: 282px;
+    height: 45.63px;
+    background: #CEBF37;
+    border-radius: 40PX;
+    
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    cursor: pointer;
+}
+#LEVEL button{
+    background: #39A015;
+    border: 5px solid #000000;
+    border-radius: 89px;
+    width: 320px;
+    height: 450px;
+    font-size: 350%;
+}
+#setting, #CHARACTER, #LEVEL{
+    font-size: xx-large;
+}
+#setting button{
+    width: 70px;
+    height: 50px;
+    border-radius: 0px;
+}
+button:active{
+    filter: opacity(60%);
+}
+.pilih{
+    background: whitesmoke;
+    color: black;
+}
+.Npilih{
+    background: black;
+    color: whitesmoke;    
+}
+#BACK{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 100px;
+    height:100px;
+}
+
+@keyframes blok{
+    from{left:670px;}
+    to{left: -700px;}
+}
+@keyframes lompat {
+    0%{top: 500px;}
+    30%{top: 400px;}
+    70%{top: 400px;}
+    100%{top: 500px;}
+}
+#player{
+    width: 100px;
+    height: 90px;
+
+    position: relative;
+    top: 500px;
+    left: -600px;
+}
+.player1{
+    background: url(popo.png);
+    background-size: contain;
+}
+.player2{
+    background: url(keket.png);
+    background-size: contain;
+}
+.player3{
+    background: url(piko.png);
+    background-size: contain;
+}
+.animate{
+    animation: lompat 500ms;
+}
+#blok{ /*mengatur obstacle*/
+    width: 70px;
+    height: 70px;
+    background: url(Polygon\ 1.png);
+    background-size: cover;
+    position: relative;
+    top: 400px;
+    left:670px;
+    animation: blok 2.5s linear infinite;
+}
+</style>
+</head>
+<body>
+<div id="border">
+    <div id="LOGO">
+        <img src="logo.png">
+    </div>
+    <div id="UI">
+        <button id="" onclick="kePlayer()">START</button><br><br>
+        <button id="settingUI" onclick="keSetting()">SETTING</button><br><br>
+        <button id="ABOUT" onclick="keAbout()">ABOUT</button>
+    </div>
+    <div id="CHARACTER" style="display: none;">
+        <h1>CHARACTER</h1>
+        <section class="container-player">
+            <div>
+                <img src="popo.png">
+            </div>
+            <div>
+                <img src="keket.png">
+            </div>
+            <div>
+                <img src="piko.png"> 
+            </div>
+        </section>
+    </div>
+    <div id="LEVEL" style="display: none;">
+        <h1>LEVEL</h1>
+        <button onclick="level(1)">1</button>
+        <button onclick="level(2)" style="margin: 1% 12.5%;">2</button>
+        <button onclick="level(3)">3</button>
+    </div>
+    <div id="setting" style="display: none;">
+        <h1>SOUND</h1>
+        <button id="ON" class="pilih" onclick="suara(true)">ON</button>
+        <button id="OFF" class="Npilih" onclick="suara(false)">OFF</button>
+    </div>
+    <div id="ABOUT" style="display: none;">
+        <!-- ISI APA DISINI -->
+    </div>
+    <div id="game" style="display: none;">
+        <div id="player"></div>
+        <div id="blok"></div>
+        <h2>SCORE:<span id="skor">0</span></h2>
+    </div>
+    <img id="BACK" src="BACK.png" style="display: none;">
+    </div>
+    <button id="RESTART" onclick="startGame()" style="display: none;">RESTART</button>
+    <button id="NEXT" onclick="next()" style="display: none;">NEXT</button>
+    <script>
+     const LOGO      = document.getElementById('LOGO');
+     const UI        = document.getElementById('UI');
+     const CHARACTER = document.getElementById('CHARACTER');
+     const allChara  = document.querySelectorAll('section div img');
+     const PLAYER    = document.getElementById('player');
+     const LEVEL     = document.getElementById('LEVEL')
+     const setting   = document.getElementById('setting');
+     const ABOUT     = document.getElementById('ABOUT');
+     const BACK      = document.getElementById('BACK');
+     const GAME      = document.getElementById('game');
+     const RESTART   = document.getElementById('RESTART');
+     const NEXT      = document.getElementById('NEXT');
+     const blok      = document.getElementById('blok');
+
+         var score = 0;
+         const musik = new sound("tema.mp3");
+         var toogleVolume = 1;
+
+    //PLAYER
+     function kePlayer(){
+      LOGO.style.display ='none';
+      UI.style.display = 'none';
+      BACK.style.display = '';
+      CHARACTER.style.display = '';
+      musik.play();
+    }
+    for(let i=0; i<allChara.length; i++){
+      allChara[i].addEventListener('click', function(){
+         keLevel();
+         switch (i) {
+             case 1:
+                 PLAYER.classList.add('player2');
+                 break;
+             case 2:
+                 PLAYER.classList.add('player3');
+                 break;
+             default:
+                 PLAYER.classList.add('player1');
+                 break;
+    }
+     })
+    }
+     //ABOUT
+     function keAbout(){
+      LOGO.style.display = 'none';
+      UI.style.display = 'none';
+      ABOUT.style.display = '';
+      BACK.style.display = '';
+    }
+     //LEVEL
+     function keLevel(){
+      CHARACTER.style.display = 'none';
+      LEVEL.style.display = '';
+    }
+     function level(e){
+      lvl = e;
+      startGame();
+      BACK.style.display = 'none';
+    }
+     //SETTING
+     function keSetting(){
+      UI.style.display = 'none';
+      setting.style.display = '';
+      BACK.style.display = '';
+      musik.play();
+    }
+BACK.addEventListener('click',function(){
+    back();
+})
+function suara(e){
+    if(e===true){ //ON MUSIK
+        document.getElementById('ON').classList.replace('Npilih','pilih');
+        document.getElementById('OFF').classList.replace('pilih','Npilih');
+        musik.play();
+    }
+    else {        //OFF MUSIK
+        document.getElementById('OFF').classList.replace('Npilih', 'pilih');
+        document.getElementById('ON').classList.replace('pilih', 'Npilih');
+        musik.stop();
+    }
+}
+function sound(src) {//PENGATURAN MUSIK
+    this.sound = document.createElement("audio"); 
+    this.sound.src = ("CatSong.mp3");                         
+    this.sound.setAttribute("preload", "auto");   
+    this.sound.setAttribute("controls", "");  
+    this.sound.setAttribute("loop", "");  
+    this.sound.style.display = "none";            
+    document.body.appendChild(this.sound);        
+ 
+    this.play = function(){//FUNCTION MULAI AUDIO
+        this.sound.play();
+    }
+    this.stop = function(){//FUNCTION STOP AUDIO
+        this.sound.pause();
+    }    
+}
+//KEMBALI KE MENU
+function back(){
+    BACK.style.display = 'none';
+    CHARACTER.style.display = 'none';
+    LEVEL.style.display = 'none';
+    setting.style.display = 'none';
+    UI.style.display = '';
+    LOGO.style.display ='';
+}
+function next() {
+    lvl += 1;
+    startGame();
+}
+function startGame(){
+    switch (lvl) {
+        case 3:
+            document.body.style.background = 'url("level3.png")';
+            document.body.style.backgroundSize = "cover";
+            blok.style.background = 'url("ular1.png")';
+            blok.style.backgroundSize = 'contain';
+            break;
+        case 2:
+            document.body.style.background = 'url("level2.png")';
+            document.body.style.backgroundSize = "cover";
+            blok.style.background = 'url("Duri2.png")';
+            blok.style.backgroundSize = 'contain';
+            break;
+        default:
+            document.body.style.background = 'url("level1.png")';
+            document.body.style.backgroundSize = "cover";
+            break;
+    }
+    LEVEL.style.display = 'none';
+    NEXT.style.display = 'none';
+    RESTART.style.display = 'none';
+    blok.style.animation = '';
+    GAME.style.display = '';
+    frame = setInterval(() => {
+        score += 1;
+        document.getElementById('skor').innerHTML = score;
+    }, 100);
+}
+function lompat(){
+    if(player.classList != 'animate'){
+        player.classList.add('animate')
+    }
+    setTimeout(function(){
+        player.classList.remove('animate');
+    },500)
+}
+var dead =  setInterval(function(){
+    var playertop = parseInt(window.getComputedStyle(player).getPropertyValue("top"));
+    var blokleft = parseInt(window.getComputedStyle(blok).getPropertyValue("left"));
+    
+    //mengecek apakah balok menabrak pemain
+    if(blokleft< -540 && blokleft> -600 && playertop>=500){
+        blok.style.animation = "none";
+        clearInterval(frame);
+        switch (lvl) {
+            case 3:
+                if(score>300){
+                    NEXT.style.display = '';
+                }else RESTART.style.display = '';
+                break;
+            case 2:
+                if(score>200){
+                    NEXT.style.display = '';
+                }else RESTART.style.display = '';
+                break;
+            default:
+                if(score>100){
+                    NEXT.style.display = '';
+                }else RESTART.style.display = '';
+                break;
+        }
+        score = 0;
+    }
+},10)
+
+</script>
+</body>
+</html>
